@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Lorekeeper'),
+    'name' => env('APP_NAME', 'Malcians'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://malcians.online'),
 
     'asset_url' => env('ASSET_URL', null),
 
