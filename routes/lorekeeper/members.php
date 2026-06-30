@@ -188,6 +188,19 @@ Route::group(['prefix' => 'shops'], function() {
     Route::get('history', 'ShopController@getPurchaseHistory');
 });
 
+
+/**************************************************************************************************
+    Dailies
+**************************************************************************************************/
+
+Route::group(['prefix' => __('dailies.dailies')], function() {
+    // throttle requests to 1 per ~2 seconds
+    Route::middleware('throttle:1,0.02')->group(function () {
+        Route::post('{id}', 'DailyController@postRoll');
+    });
+});
+
+
 /**************************************************************************************************
     Comments
 **************************************************************************************************/
