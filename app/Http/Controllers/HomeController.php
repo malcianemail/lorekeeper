@@ -12,6 +12,9 @@ use DB;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
+use App\Models\Comment;
+use App\Models\Forum;
+
 class HomeController extends Controller
 {
     /*

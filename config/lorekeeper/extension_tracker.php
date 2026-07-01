@@ -1,6 +1,6 @@
 <?php
 return [
-    
+
     // FORMAT EXAMPLE.
     //
     // 'extension_tracker' => [
@@ -11,14 +11,16 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
-    
-    'dailies' => [
-        'key' => 'dailies',
-        'wiki_key' => 'Dailies',
+
+
+    'forums' => [
+        'key' => 'forums',
+        'wiki_key' => 'Forums',
         'creators' => json_encode([
-            'Cylunny' => 'https://toyhou.se/cylunny',
+            'Uri' => 'https://github.com/preimpression/',
         ]),
-        'version' => '2.0.1', 
+        'version' => '1.0.0',
     ],
+
 
 ];
