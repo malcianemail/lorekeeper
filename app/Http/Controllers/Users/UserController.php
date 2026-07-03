@@ -48,13 +48,16 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $name = Route::current()->parameter('name');
-        $this->user = User::where('name', $name)->first();
-        if(!$this->user) abort(404);
+    $route = Route::current();
 
-        $this->user->updateCharacters();
+if (!$route) {
+    return;
+}
+
+$name = $route->parameter('name');
+
+if (!$name) {
+    return;
         $this->user->updateArtDesignCredits();
     }
 
