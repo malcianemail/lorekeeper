@@ -34,39 +34,25 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | User Controller
-    |--------------------------------------------------------------------------
-    |
-    | Displays user profile pages.
-    |
-    */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $name = $request->route('name');
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-public function __construct()
-{
-$this->middleware(function ($request, $next) {
-$name = $request->route('name');
+            if ($name) {
+                $this->user = User::where('name', $name)->first();
 
-if ($name) {
-$this->user = User::where('name', $name)->first();
+                if (!$this->user) {
+                    abort(404);
+                }
 
-if (!$this->user) {
-abort(404);
-}
+                $this->user->updateCharacters();
+                $this->user->updateArtDesignCredits();
+            }
 
-$this->user->updateCharacters();
-$this->user->updateArtDesignCredits();
-}
-
-return $next($request);
-});
-}
+            return $next($request);
+        });
+    }
     /**
      * Shows a user's profile.
      *
@@ -359,23 +345,36 @@ return $next($request);
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getUserForumPosts($name)
-    {
-        $user = $this->user;
+{
+    $user = $this->user;
 
-        $forums = Forum::all();
-        $public = [];
-        $posts = collect();
+    $forums = Forum::all();
+    $public = [];
 
-        foreach($forums as $key => $forum)
-        {
-            if(Auth::user()->canVisitForum($forum->id) && ($forum->parent ? (Auth::user()->canVisitForum($forum->parent->id) && ($forum->parent->parent ? Auth::user()->canVisitForum($forum->parent->parent->id) : true) ) : true)) $public[] = $forum->id;
+    foreach ($forums as $forum) {
+        if (
+            Auth::check() &&
+            Auth::user()->canVisitForum($forum->id) &&
+            ($forum->parent ? Auth::user()->canVisitForum($forum->parent->id) : true) &&
+            ($forum->parent && $forum->parent->parent
+                ? Auth::user()->canVisitForum($forum->parent->parent->id)
+                : true)
+        ) {
+            $public[] = $forum->id;
         }
-        $posts = Comment::with('parent')->where('commentable_type','App\Models\Forum')->where('commenter_id',$user->id)->orderBy('created_at', 'DESC')->get()->whereIn('commentable_id',$public);
-
-        return view('user.forum_posts', [
-            'user' => $this->user,
-            'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
-            'posts' => $posts->paginate(20)
-        ]);
     }
+
+    $posts = Comment::with('parent')
+        ->where('commentable_type', 'App\Models\Forum')
+        ->where('commenter_id', $user->id)
+        ->whereIn('commentable_id', $public)
+        ->orderBy('created_at', 'DESC')
+        ->paginate(20);
+
+    return view('user.forum_posts', [
+        'user' => $this->user,
+        'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
+        'posts' => $posts
+    ]);
+}
 }

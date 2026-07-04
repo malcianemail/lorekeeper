@@ -163,6 +163,11 @@ return [
             [
                 'name' => 'Dailies',
                 'url' => 'admin/data/dailies'
+            ]
+            [
+                'name' => 'Character Drops',
+                'url' => 'admin/data/character-drops'
+            ]
             ],
             [
                 'name' => 'Currencies',
