@@ -48,19 +48,25 @@ class UserController extends Controller
      *
      * @return void
      */
-    $route = Route::current();
+public function __construct()
+{
+$this->middleware(function ($request, $next) {
+$name = $request->route('name');
 
-if (!$route) {
-    return;
+if ($name) {
+$this->user = User::where('name', $name)->first();
+
+if (!$this->user) {
+abort(404);
 }
 
-$name = $route->parameter('name');
+$this->user->updateCharacters();
+$this->user->updateArtDesignCredits();
+}
 
-if (!$name) {
-    return;
-        $this->user->updateArtDesignCredits();
-    }
-
+return $next($request);
+});
+}
     /**
      * Shows a user's profile.
      *
