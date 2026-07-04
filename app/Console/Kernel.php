@@ -31,7 +31,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('check-sales')
                 ->everyMinute();
         $schedule->command('update-timed-daily')
-                ->everyMinute();          
+                ->everyMinute(); 
+        $schedule->command('check-character-drops')
+                ->everyMinute();         
 
     }
 

@@ -23,6 +23,7 @@ use App\Models\Character\CharacterCategory;
 use App\Models\Character\CharacterFeature;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\CharacterTransfer;
+use App\Models\Character\CharacterDrop;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterBookmark;
 use App\Models\User\UserCharacterLog;
@@ -131,6 +132,12 @@ class CharacterManager extends Service
             // Update the character's image ID
             $character->character_image_id = $image->id;
             $character->save();
+
+            // Create drop information for the character, if relevant
+            if($character->image->species && $character->image->species->dropData) {
+                $drop = new CharacterDrop;
+                if($drop->createDrop($character->id, isset($data['parameters']) && $data['parameters'] ? $data['parameters'] : null)) throw new \Exception('Failed to create character drop.');
+            }
 
             // Add a log for the character
             // This logs all the updates made to the character
@@ -1386,7 +1393,7 @@ class CharacterManager extends Service
             $queueOpen = Settings::get('open_transfers_queue');
 
             CharacterTransfer::create([
-                'user_reason' => $data['user_reason'],  # pulls from this characters user_reason collum
+                'user_reason' => $data['user_reason'],  # pulls from this characters user_reason column
                 'character_id' => $character->id,
                 'sender_id' => $user->id,
                 'recipient_id' => $recipient->id,
@@ -1731,7 +1738,7 @@ class CharacterManager extends Service
 
         // Add a log for the ownership change
         $this->createLog(
-is_object($sender) ? $sender->id : null,
+            is_object($sender) ? $sender->id : null,
             is_object($sender) ? null : $sender,
             $recipient && is_object($recipient) ? $recipient->id : null,
             $recipient && is_object($recipient) ? $recipient->url : ($recipient ? : null),
