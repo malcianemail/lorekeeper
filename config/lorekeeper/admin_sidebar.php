@@ -163,15 +163,13 @@ return [
             [
                 'name' => 'Dailies',
                 'url' => 'admin/data/dailies'
-            ]
+            ],
             [
                 'name' => 'Character Drops',
                 'url' => 'admin/data/character-drops'
-            ]
             ],
             [
-                'name' => 'Currencies',
-                'url' => 'admin/data/currencies'
+                'name' => 'Currencies',                'url' => 'admin/data/currencies'
             ],
             [
                 'name' => 'Prompts',
