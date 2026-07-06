@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Models\User\UserItem;
 use App\Services\Service;
 
 use DB;
@@ -53,6 +54,18 @@ class ShopManager extends Service
             if($shopStock->purchase_limit && $quantity > $shopStock->purchase_limit) throw new \Exception("The quantity specified exceeds the amount of this item you can buy.");
 
             $total_cost = $shopStock->cost * $quantity;
+foreach($shopStock->tradeItems as $tradeItem) {
+    $requiredQty = $tradeItem->quantity * $quantity;
+
+    $stack = UserItem::where('user_id', $user->id)
+        ->where('item_id', $tradeItem->item_id)
+        ->where('count', '>=', $requiredQty)
+        ->first();
+
+    if(!$stack) {
+        throw new \Exception("You do not own enough " . $tradeItem->item->name . " to make this purchase.");
+    }
+}
 
             $character = null;
             if($data['bank'] == 'character')
@@ -77,6 +90,20 @@ class ShopManager extends Service
                 if($shopStock->cost > 0 && !(new CurrencyManager)->debitCurrency($user, null, 'Shop Purchase', 'Purchased '.$shopStock->item->name.' from '.$shop->name, $shopStock->currency, $total_cost)) throw new \Exception("Not enough currency to make this purchase.");
             }
 
+foreach($shopStock->tradeItems as $tradeItem) {
+    $requiredQty = $tradeItem->quantity * $quantity;
+
+    $stack = UserItem::where('user_id', $user->id)
+        ->where('item_id', $tradeItem->item_id)
+        ->where('count', '>=', $requiredQty)
+        ->first();
+
+    if(!$stack || !(new InventoryManager)->debitStack($user, 'Shop Trade-In', [
+        'data' => 'Traded in for purchase of '.$shopStock->item->name.' from '.$shop->name
+    ], $stack, $requiredQty)) {
+        throw new \Exception("Failed to trade in required item.");
+    }
+}
             // If the item has a limited quantity, decrease the quantity
             if($shopStock->is_limited_stock)
             {

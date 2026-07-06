@@ -39,7 +39,7 @@ class CharacterDropData extends Model
      * @var array
      */
     public static $createRules = [
-        'species_id' => 'required|unique:character_drop_data',
+        'species_id' => 'required',
         'drop_frequency' => 'required',
         'drop_interval' => 'required'
     ];
@@ -111,10 +111,14 @@ class CharacterDropData extends Model
      */
     public function getParameterArrayAttribute()
     {
-        foreach($this->parameters as $parameter=>$weight) $paramArray[$parameter] = $parameter;
+        $paramArray = [];
+
+        foreach($this->parameters as $parameter=>$weight) {
+            $paramArray[$parameter] = $parameter;
+        }
+
         return $paramArray;
     }
-
     /**
      * Get the parameter attribute as an associative array.
      *

@@ -45,6 +45,8 @@ class CharacterDropService extends Service
             $data['data']['frequency'] = ['frequency' => $data['drop_frequency'], 'interval' => $data['drop_interval']];
             $data['is_active'] = isset($data['is_active']) && $data['is_active'] ? $data['is_active'] : 0;
             $data['data']['drop_name'] = isset($data['drop_name']) ? $data['drop_name'] : null;
+            $data['data']['reroll_group'] = isset($data['reroll_group']) ? 1 : 0;
+            $data['data']['group_assignment'] = isset($data['group_assignment']) ? $data['group_assignment'] : 'permanent';
             $data['data'] = json_encode($data['data']);
 
             $drop = CharacterDropData::create(Arr::only($data, ['species_id', 'parameters', 'data']));
@@ -71,7 +73,7 @@ class CharacterDropService extends Service
             // Check to see if species exists and if drop data already exists for it.
             $species = Species::find($data['species_id']);
             if(!$species) throw new \Exception('The selected species is invalid.');
-            if(CharacterDropData::where('species_id', $data['species_id'])->where('id', '!=', $drop->id)->exists()) throw new \Exception('This species already has drop data. Consider editing the existing data instead.');
+// if(CharacterDropData::where('species_id', $data['species_id'])->where('id', '!=', $drop->id)->exists()) throw new \Exception('This species already has drop data. Consider editing the existing data instead.');
 
             // Collect parameter data and encode it
             $paramData = [];
@@ -102,6 +104,8 @@ class CharacterDropService extends Service
             $data['data']['frequency'] = ['frequency' => $data['drop_frequency'], 'interval' => $data['drop_interval']];
             $data['is_active'] = isset($data['is_active']) && $data['is_active'] ? $data['is_active'] : 0;
             $data['data']['drop_name'] = isset($data['drop_name']) ? $data['drop_name'] : null;
+            $data['data']['reroll_group'] = isset($data['reroll_group']) ? 1 : 0;
+            $data['data']['group_assignment'] = isset($data['group_assignment']) ? $data['group_assignment'] : 'permanent';
             $data['data']['cap'] = isset($data['cap']) ? $data['cap'] : null;
             $data['data'] = json_encode($data['data']);
 

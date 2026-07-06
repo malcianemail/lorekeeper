@@ -80,11 +80,15 @@ class Species extends Model
     /**
      * Get the drop data associated with this species.
      */
-    public function dropData()
-    {
-        return $this->hasOne('App\Models\Character\CharacterDropData');
-    }
+public function dropData()
+{
+    return $this->hasOne('App\Models\Character\CharacterDropData');
+}
 
+public function dropDatas()
+{
+    return $this->hasMany('App\Models\Character\CharacterDropData');
+}
     /**********************************************************************************************
 
         ACCESSORS

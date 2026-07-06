@@ -212,27 +212,34 @@ class Character extends Model
     /**
      * Get the character's character drop data.
      */
-    public function drops()
-    {
-        $species = $this->image && $this->image->species ? $this->image->species : null;
-        $dropData = $species ? $species->dropData : null;
+public function drops()
+{
+    $species = $this->image && $this->image->species ? $this->image->species : null;
+    $subtypeId = $this->image ? $this->image->subtype_id : null;
 
-        if (!$dropData) {
-            return $this->hasOne('App\Models\Character\CharacterDrop', 'character_id');
-        }
-
-        if (!CharacterDrop::where('character_id', $this->id)->first()) {
-            $drop = new CharacterDrop;
-            $drop->createDrop($this->id);
-        }
-        elseif (!CharacterDrop::where('character_id', $this->id)->where('drop_id', $dropData->id)->first()) {
-            CharacterDrop::where('character_id', $this->id)->delete();
-            $drop = new CharacterDrop;
-            $drop->createDrop($this->id);
-        }
-
+    if (!$species) {
         return $this->hasOne('App\Models\Character\CharacterDrop', 'character_id');
     }
+
+    $dropData = $species->dropDatas()->where('is_active', 1)->get()->first(function($data) use ($subtypeId) {
+        return isset($data->data['items'][$subtypeId]);
+    });
+
+    if (!$dropData) {
+        return $this->hasOne('App\Models\Character\CharacterDrop', 'character_id');
+    }
+
+    $currentDrop = CharacterDrop::where('character_id', $this->id)->first();
+
+    if (!$currentDrop || $currentDrop->drop_id != $dropData->id) {
+        CharacterDrop::where('character_id', $this->id)->delete();
+
+        $drop = new CharacterDrop;
+        $drop->createDrop($this->id, null, $dropData->id);
+    }
+
+    return $this->hasOne('App\Models\Character\CharacterDrop', 'character_id');
+}
     /**********************************************************************************************
 
         SCOPES

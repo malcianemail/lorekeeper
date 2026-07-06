@@ -1,10 +1,12 @@
 <div class="card mb-3 stock {{ $stock ? '' : 'hide' }}">
     <div class="card-body">
         <div class="text-right mb-3"><a href="#" class="remove-stock-button btn btn-danger">Remove</a></div>
+
         <div class="form-group">
             {!! Form::label('item_id['.$key.']', 'Item') !!}
             {!! Form::select('item_id['.$key.']', $items, $stock ? $stock->item_id : null, ['class' => 'form-control stock-field', 'data-name' => 'item_id']) !!}
         </div>
+
         <div class="form-group">
             {!! Form::label('cost['.$key.']', 'Cost') !!}
             <div class="row">
@@ -16,7 +18,46 @@
                 </div>
             </div>
         </div>
-        
+
+<div class="card mt-3 mb-3">
+    <div class="card-body">
+        <h5>Trade-In Requirements</h5>
+
+        @php
+            $tradeItems = $stock && $stock->tradeItems->count() ? $stock->tradeItems : collect([null]);
+        @endphp
+
+        <div class="trade-requirement-list">
+            @foreach($tradeItems as $tradeItem)
+                <div class="trade-requirement-row row mb-2">
+                    <div class="col-md-7">
+                        {!! Form::select(
+                            'trade_item_id['.$key.'][]',
+                            ['' => 'None'] + (is_array($items) ? $items : $items->toArray()),
+                            $tradeItem ? $tradeItem->item_id : null,
+                            ['class' => 'form-control stock-field', 'data-name' => 'trade_item_id']
+                        ) !!}
+                    </div>
+                    <div class="col-md-3">
+                        {!! Form::number(
+                            'trade_quantity['.$key.'][]',
+                            $tradeItem ? $tradeItem->quantity : 1,
+                            ['class' => 'form-control stock-field', 'data-name' => 'trade_quantity', 'min' => 1]
+                        ) !!}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger remove-trade-requirement">×</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm add-trade-requirement">
+            + Add Requirement
+        </button>
+    </div>
+</div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -31,10 +72,12 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             {!! Form::checkbox('is_limited_stock['.$key.']', 1, $stock ? $stock->is_limited_stock : false, ['class' => 'form-check-input stock-limited stock-toggle stock-field', 'data-name' => 'is_limited_stock']) !!}
             {!! Form::label('is_limited_stock['.$key.']', 'Set Limited Stock', ['class' => 'form-check-label ml-3']) !!} {!! add_help('If turned on, will limit the amount purchaseable to the quantity set below.') !!}
         </div>
+
         <div class="card mb-3 stock-limited-quantity {{ $stock && $stock->is_limited_stock ? '' : 'hide' }}">
             <div class="card-body">
                 <div>
@@ -43,9 +86,11 @@
                 </div>
             </div>
         </div>
+
         <div>
             {!! Form::label('purchase_limit['.$key.']', 'User Purchase Limit') !!} {!! add_help('This is the maximum amount of this item a user can purchase from this shop. Set to 0 to allow infinite purchases.') !!}
             {!! Form::text('purchase_limit['.$key.']', $stock ? $stock->purchase_limit : 0, ['class' => 'form-control stock-field', 'data-name' => 'purchase_limit']) !!}
         </div>
     </div>
 </div>
+

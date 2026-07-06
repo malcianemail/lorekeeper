@@ -68,6 +68,11 @@ Select how often drops should occur.
 </div>
 
 <div class="form-group">
+    {!! Form::checkbox('reroll_group', 1, isset($drop->data['reroll_group']) ? $drop->data['reroll_group'] : 0, ['class' => 'form-check-input', 'id' => 'reroll_group']) !!}
+    {!! Form::label('reroll_group', 'Reroll group every drop cycle', ['class' => 'form-check-label ml-4']) !!}
+</div>
+
+<div class="form-group">
     {!! Form::label('drop_name', 'Drop Name', ['class' => 'form-label']) !!} {!! add_help('What drops are referred to on character pages. Impacts subtypes as well. Should be singular.') !!}
     {!! Form::text('drop_name', isset($drop->data['drop_name']) ? $drop->data['drop_name'] : null, ['class' => 'form-control']) !!}
 </div>

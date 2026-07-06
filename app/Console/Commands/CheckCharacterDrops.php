@@ -44,15 +44,30 @@ class CheckCharacterDrops extends Command
     {
         //
         $updateDrops = CharacterDrop::requiresUpdate()->get();
-        foreach ($updateDrops as $drop) {
-            if((!isset($drop->dropData->cap) || $drop->dropData->cap == 0) || $drop->drops_available < $drop->dropData->cap)
-            $drop->update([
-                'drops_available' => $drop->drops_available += 1,
-                'next_day' => Carbon::now()->add(
-                    $drop->dropData->data['frequency']['frequency'],
-                    $drop->dropData->data['frequency']['interval']
-                )->startOf($drop->dropData->data['frequency']['interval'])
-            ]);
+foreach ($updateDrops as $drop) {
+
+    if((!isset($drop->dropData->cap) || $drop->dropData->cap == 0) || $drop->drops_available < $drop->dropData->cap) {
+
+        $updates = [
+            'drops_available' => $drop->drops_available + 1,
+            'next_day' => Carbon::now()->add(
+                $drop->dropData->data['frequency']['frequency'],
+                $drop->dropData->data['frequency']['interval']
+            )->startOf($drop->dropData->data['frequency']['interval'])
+        ];
+
+        if(
+            isset($drop->dropData->data['group_assignment']) &&
+            $drop->dropData->data['group_assignment'] === 'cycle'
+        ) {
+            $drop->delete();
+            $drop->createDrop($drop->character_id);
+
+            continue;
         }
+
+        $drop->update($updates);
+    }
+}
     }
 }

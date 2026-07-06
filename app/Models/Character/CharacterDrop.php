@@ -176,10 +176,12 @@ class CharacterDrop extends Model
      *
      * @param int              $id
      */
-    public function createDrop($id, $parameters = null)
+    public function createDrop($id, $parameters = null, $dropDataId = null)
     {
         $character = Character::find($id);
-        $dropData = $character->image->species->dropData;
+        $dropData = $dropDataId
+    ? CharacterDropData::find($dropDataId)
+    : $character->image->species->dropData;
         $drop = $this->create([
             'drop_id' => $dropData->id,
             'character_id' => $id,

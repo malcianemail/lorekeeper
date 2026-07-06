@@ -9,6 +9,29 @@
         @if($stock->purchase_limit) <div class="text-danger">Max {{ $stock->purchase_limit }} per user</div> @endif
     </div>
 
+@if($stock->tradeItems && $stock->tradeItems->count())
+    <div class="alert alert-info">
+        <strong>Trade-In Required:</strong>
+        <ul class="mb-0">
+            @foreach($stock->tradeItems as $tradeItem)
+                @php
+                    $owned = Auth::check() ? Auth::user()->items()->where('item_id', $tradeItem->item_id)->sum('count') : 0;
+                    $needed = $tradeItem->quantity;
+                @endphp
+                <li>
+                    {{ $tradeItem->item->name }} ×{{ $needed }}
+                    — You have {{ $owned }}
+                    @if($owned >= $needed)
+                        ✅
+                    @else
+                        ❌
+                    @endif
+                </li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     @if($stock->item->parsed_description)
         <div class="mb-2">
             <a data-toggle="collapse" href="#itemDescription" class="h5">Description <i class="fas fa-caret-down"></i></a>

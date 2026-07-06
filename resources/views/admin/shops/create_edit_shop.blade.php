@@ -82,15 +82,56 @@ $( document ).ready(function() {
         e.preventDefault();
         loadModal("{{ url('admin/data/shops/delete') }}/{{ $shop->id }}", 'Delete Shop');
     });
-    $('.add-stock-button').on('click', function(e) {
-        e.preventDefault();
+$('.add-stock-button').on('click', function(e) {
+    e.preventDefault();
 
-        var clone = $stock.clone();
-        $shopStock.append(clone);
-        clone.removeClass('hide');
-        attachStockListeners(clone);
-        refreshStockFieldNames();
+    var clone = $stock.clone();
+
+    clone.find('.trade-requirement-row:not(:first)').remove();
+    clone.find('select').val('');
+    clone.find('input[type=text], input[type=number]').val('');
+    clone.find('input[type=checkbox]').prop('checked', false);
+
+    clone.find('input[data-name=cost]').val('');
+    clone.find('input[data-name=quantity]').val(0);
+    clone.find('input[data-name=purchase_limit]').val(0);
+    clone.find('input[data-name=trade_quantity]').val(1);
+
+    $shopStock.append(clone);
+    clone.removeClass('hide');
+    attachStockListeners(clone);
+    refreshStockFieldNames();
+});
     });
+
+$(document).on('click', '.add-trade-requirement', function(e) {
+    e.preventDefault();
+
+    var card = $(this).closest('.card-body');
+    var list = card.find('.trade-requirement-list');
+    var row = list.find('.trade-requirement-row:first').clone();
+
+    row.find('select').val('');
+    row.find('input').val(1);
+
+    list.append(row);
+    refreshStockFieldNames();
+});
+
+$(document).on('click', '.remove-trade-requirement', function(e) {
+    e.preventDefault();
+
+    var list = $(this).closest('.trade-requirement-list');
+
+    if(list.find('.trade-requirement-row').length > 1) {
+        $(this).closest('.trade-requirement-row').remove();
+    } else {
+        $(this).closest('.trade-requirement-row').find('select').val('');
+        $(this).closest('.trade-requirement-row').find('input').val(1);
+    }
+
+    refreshStockFieldNames();
+});
 
     attachStockListeners($('#shopStock .stock'));
     function attachStockListeners(stock) {
@@ -111,16 +152,25 @@ $( document ).ready(function() {
         });
         stock.find('.card-body [data-toggle=tooltip]').tooltip({html: true});
     }
-    function refreshStockFieldNames()
-    {
-        $('.stock').each(function(index) {
-            var $this = $(this);
-            var key = index;
-            $this.find('.stock-field').each(function() {
-                $(this).attr('name', $(this).data('name') + '[' + key + ']');
-            });
+function refreshStockFieldNames()
+{
+    $('#shopStock .stock:not(.hide)').each(function(index) {
+        var $this = $(this);
+        var key = index;
+
+        $this.find('.stock-field').each(function() {
+            var name = $(this).data('name');
+
+            if(name == 'trade_item_id' || name == 'trade_quantity') {
+                $(this).attr('name', name + '[' + key + '][]');
+            } else {
+                $(this).attr('name', name + '[' + key + ']');
+            }
         });
-    }
+    });
+}
+$('form').on('submit', function() {
+    refreshStockFieldNames();
 });
     
 </script>

@@ -52,4 +52,11 @@ class ShopStock extends Model
     {
         return $this->belongsTo('App\Models\Currency\Currency');
     }
+    
+   /**
+    *Enables Trade items in Shop*/
+   public function tradeItems()
+{
+    return $this->hasMany('App\Models\Shop\ShopStockTradeItem', 'shop_stock_id');
+}
 }
