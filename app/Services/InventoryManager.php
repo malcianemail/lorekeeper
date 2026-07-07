@@ -283,6 +283,14 @@ class InventoryManager extends Service
 
             // Clear the number of available drops
             $drops->update(['drops_available' => 0]);
+if(
+    isset($drops->dropData->data['reroll_group']) &&
+    $drops->dropData->data['reroll_group']
+) {
+    $drops->update([
+        'parameters' => $drops->dropData->rollParameters()
+    ]);
+}
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {
