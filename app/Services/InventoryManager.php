@@ -281,16 +281,23 @@ class InventoryManager extends Service
             )) $successes += 1;
             if($successes != $drops->items->count() * $drops->drops_available) throw new \Exception('Failed to collect all drops.');
 
-            // Clear the number of available drops
-            $drops->update(['drops_available' => 0]);
+// Clear the number of available drops and restart timer
+$updates = [
+    'drops_available' => 0,
+    'next_day' => Carbon::now()->add(
+        $drops->dropData->data['frequency']['frequency'],
+        $drops->dropData->data['frequency']['interval']
+    )->startOf($drops->dropData->data['frequency']['interval']),
+];
+
 if(
     isset($drops->dropData->data['reroll_group']) &&
     $drops->dropData->data['reroll_group']
 ) {
-    $drops->update([
-        'parameters' => $drops->dropData->rollParameters()
-    ]);
+    $updates['parameters'] = $drops->dropData->rollParameters();
 }
+
+$drops->update($updates);
 
             return $this->commitReturn(true);
         } catch(\Exception $e) {
