@@ -471,4 +471,31 @@ Route::group(['prefix' => 'forums', 'middleware' => 'power:edit_data'], function
     Route::post('create', 'ForumController@postCreateEditForum');
     Route::post('edit/{id?}', 'ForumController@postCreateEditForum');
     Route::post('delete/{id}', 'ForumController@postDeleteForum');
-});
+ });
+
+# HOMESTEAD
+Route::group(['prefix' => 'homestead', 'namespace' => 'Homestead'], function() {
+    Route::group(['middleware' => 'power:edit_data'], function() {
+        Route::get('featured', 'FeaturedController@getIndex');
+        Route::get('featured/create', 'FeaturedController@getCreateFeatured');
+        Route::post('featured/create', 'FeaturedController@postCreateFeatured');
+        Route::get('featured/edit/{id}', 'FeaturedController@getEditFeatured')->where('id', '[0-9]+');
+        Route::post('featured/edit/{id}', 'FeaturedController@postEditFeatured')->where('id', '[0-9]+');
+        Route::post('featured/toggle/{id}', 'FeaturedController@postToggleFeatured')->where('id', '[0-9]+');
+        Route::post('featured/delete/{id}', 'FeaturedController@postDeleteFeatured')->where('id', '[0-9]+');
+        Route::post('featured/sort', 'FeaturedController@postSortFeatured');
+        Route::get('featured/{type}', 'FeaturedController@getIndex')->where('type', 'rooms|houses|characters');
+    });
+
+    Route::group(['middleware' => 'power:manage_characters'], function() {
+        Route::get('sprites', 'SpriteController@getIndex');
+        Route::get('sprites/character/{slug}', 'SpriteController@getCharacterSprites');
+        Route::post('sprites/character/{slug}', 'SpriteController@postCreateSprite');
+        Route::post('sprites/character/{slug}/sort', 'SpriteController@postSortSprites');
+        Route::post('sprites/character/{slug}/{id}/edit', 'SpriteController@postEditSprite')->where('id', '[0-9]+');
+        Route::post('sprites/character/{slug}/{id}/active', 'SpriteController@postActiveSprite')->where('id', '[0-9]+');
+        Route::post('sprites/character/{slug}/{id}/delete', 'SpriteController@postDeleteSprite')->where('id', '[0-9]+');
+
+        Route::get('sprite-slots', 'SpriteSlotController@getIndex');
+        Route::post('sprite-slots/edit/{id}', 'SpriteSlotController@postEditSlots')->where('id', '[0-9]+');
+    });

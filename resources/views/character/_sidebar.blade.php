@@ -5,6 +5,9 @@
         <div class="sidebar-item"><a href="{{ $character->url }}" class="{{ set_active('character/'.$character->slug) }}">Information</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/profile' }}" class="{{ set_active('character/'.$character->slug.'/profile') }}">Profile</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/gallery' }}" class="{{ set_active('character/'.$character->slug.'/gallery') }}">Gallery</a></div>
+        @if(!$character->is_myo_slot)
+            <div class="sidebar-item"><a href="{{ $character->url . '/sprites' }}" class="{{ set_active('character/'.$character->slug.'/sprites') }}">Sprites</a></div>
+        @endif
         <div class="sidebar-item"><a href="{{ $character->url . '/inventory' }}" class="{{ set_active('character/'.$character->slug.'/inventory') }}">Inventory</a></div>
         <div class="sidebar-item"><a href="{{ $character->url . '/bank' }}" class="{{ set_active('character/'.$character->slug.'/bank') }}">Bank</a></div>
         @if($character->image->species->hasDrops && ($character->drops->dropData->isActive || (Auth::check() && Auth::user()->hasPower('manage_characters'))))

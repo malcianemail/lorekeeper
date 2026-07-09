@@ -33,6 +33,7 @@ use App\Models\Character\CharacterTransfer;
 use App\Services\CurrencyManager;
 use App\Services\InventoryManager;
 use App\Services\CharacterManager;
+use App\Services\Character\CharacterSpriteService;
 
 use App\Http\Controllers\Controller;
 
@@ -149,6 +150,28 @@ class CharacterController extends Controller
         return view('character.gallery', [
             'character' => $this->character,
             'submissions' => GallerySubmission::whereIn('id', $this->character->gallerySubmissions->pluck('gallery_submission_id')->toArray())->visible(Auth::user() ?? null)->orderBy('created_at', 'DESC')->paginate(20),
+        ]);
+    }
+
+    /**
+     * Shows a character's homestead sprites.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCharacterSprites($slug)
+    {
+        $user = Auth::check() ? Auth::user() : null;
+        $canManage = $user && ($this->character->user_id == $user->id || $user->hasPower('manage_characters'));
+        $sprites = $this->character->sprites()->get();
+        $spriteService = new CharacterSpriteService;
+        $slots = $spriteService->getSpriteSlotSummary($this->character);
+
+        return view('character.sprites', [
+            'character' => $this->character,
+            'sprites' => $sprites,
+            'canManage' => $canManage,
+            'slots' => $slots,
         ]);
     }
 

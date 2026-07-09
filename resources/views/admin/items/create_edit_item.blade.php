@@ -137,6 +137,45 @@
     </div>
 @endif
 
+<h3>Homestead Decoration</h3>
+<p class="text-muted">Configure whether this item can be placed in the homestead room editor. Users must own the item for it to appear in their editor inventory.</p>
+
+<div class="form-group">
+    {!! Form::checkbox('is_homestead_item', 1, $item->id ? $item->is_homestead_item : 0, ['class' => 'form-check-input', 'data-toggle' => 'toggle', 'id' => 'is_homestead_item']) !!}
+    {!! Form::label('is_homestead_item', 'Homestead Placeable Item', ['class' => 'form-check-label ml-3']) !!} {!! add_help('When enabled, users who own this item can place it in homestead room/house editors.') !!}
+</div>
+
+<div id="homestead-fields" class="{{ $item->is_homestead_item ? '' : 'd-none' }}">
+    <div class="row">
+        <div class="col-md">
+            <div class="form-group">
+                {!! Form::label('placement_type', 'Placement Type') !!} {!! add_help('Determines which editor tab shows this item (Furniture vs Surfaces).') !!}
+                {!! Form::select('placement_type', ['' => 'Select a type'] + Config::get('lorekeeper.homestead.placement_types', []), $item->placement_type, ['class' => 'form-control']) !!}
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                {!! Form::label('homestead_room_type', 'Room Type') !!} {!! add_help('Restrict this item to indoor rooms, outdoor houses, or allow both.') !!}
+                {!! Form::select('homestead_room_type', Config::get('lorekeeper.homestead.homestead_room_types', []), $item->homestead_room_type, ['class' => 'form-control']) !!}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="form-group">
+                {!! Form::label('default_width', 'Default Width (px)') !!}
+                {!! Form::number('default_width', $item->default_width ?: 64, ['class' => 'form-control', 'min' => 8, 'max' => 700]) !!}
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                {!! Form::label('default_height', 'Default Height (px)') !!}
+                {!! Form::number('default_height', $item->default_height ?: 64, ['class' => 'form-control', 'min' => 8, 'max' => 500]) !!}
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="text-right">
     {!! Form::submit($item->id ? 'Edit' : 'Create', ['class' => 'btn btn-primary']) !!}
 </div>
@@ -194,6 +233,17 @@ $( document ).ready(function() {
         e.preventDefault();
         loadModal("{{ url('admin/data/items/delete') }}/{{ $item->id }}", 'Delete Item');
     });
+
+    function toggleHomesteadFields() {
+        if ($('#is_homestead_item').prop('checked')) {
+            $('#homestead-fields').removeClass('d-none');
+        } else {
+            $('#homestead-fields').addClass('d-none');
+        }
+    }
+
+    $('#is_homestead_item').on('change', toggleHomesteadFields);
+    toggleHomesteadFields();
 });
 
 </script>

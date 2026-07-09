@@ -152,6 +152,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's homestead room saves.
+     */
+    public function roomSaves()
+    {
+        return $this->hasMany('App\Models\Homestead\RoomSave');
+    }
+
+    /**
      * Get the user's rank data.
      */
     public function rank()
@@ -189,6 +197,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function bookmarks()
     {
         return $this->hasMany('App\Models\Character\CharacterBookmark')->where('user_id', $this->id);
+    }
+
+    /**
+     * Get all of the user's homestead favorites.
+     */
+    public function homesteadFavorites()
+    {
+        return $this->hasMany('App\Models\Homestead\HomesteadFavorite');
     }
 
     /**********************************************************************************************

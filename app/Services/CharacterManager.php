@@ -26,6 +26,8 @@ use App\Models\Character\CharacterTransfer;
 use App\Models\Character\CharacterDrop;
 use App\Models\Character\CharacterDesignUpdate;
 use App\Models\Character\CharacterBookmark;
+use App\Models\Homestead\HomesteadFavorite;
+use App\Services\Homestead\Concerns\CleansHomesteadReferences;
 use App\Models\User\UserCharacterLog;
 use App\Models\Species\Species;
 use App\Models\Species\Subtype;
@@ -35,6 +37,8 @@ use App\Models\Feature\Feature;
 
 class CharacterManager extends Service
 {
+    use CleansHomesteadReferences;
+
     /*
     |--------------------------------------------------------------------------
     | Character Manager
@@ -1332,6 +1336,8 @@ class CharacterManager extends Service
 
             // Delete associated bookmarks
             CharacterBookmark::where('character_id', $character->id)->delete();
+
+            $this->cleanupHomesteadReferences(HomesteadFavorite::TYPE_CHARACTER, $character->id);
 
             // Delete associated features and images
             // Images use soft deletes

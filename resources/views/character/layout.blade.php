@@ -21,4 +21,7 @@
         });
     });
 </script>
+@if(Auth::check())
+<script src="{{ asset('js/homestead-favorite-button.js') }}?v={{ filemtime(public_path('js/homestead-favorite-button.js')) }}"></script>
+@endif
 @endsection

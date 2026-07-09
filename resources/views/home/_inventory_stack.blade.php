@@ -49,10 +49,14 @@
                         @endif
                         <td class="col-3">{!! array_key_exists('notes', $itemRow->data) ? ($itemRow->data['notes'] ? $itemRow->data['notes'] : 'N/A') : 'N/A' !!}</td>
                         @if($user && !$readOnly && ($stack->first()->user_id == $user->id || $user->hasPower('edit_inventories')))
-                            @if($itemRow->availableQuantity)
-                                <td class="col-3">{!! Form::selectRange('', 1, $itemRow->availableQuantity, 1, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!} /{{ $itemRow->availableQuantity }} @if($itemRow->getOthers()) {{ $itemRow->getOthers() }} @endif</td>
+                            @php
+                                $isSlotItem = $item->hasTag('room_slot') || $item->hasTag('house_slot') || $item->hasTag('sprite_slot');
+                                $selectableQty = $isSlotItem ? $itemRow->activatableSlotQuantity : $itemRow->availableQuantity;
+                            @endphp
+                            @if($selectableQty)
+                                <td class="col-3">{!! Form::selectRange('', 1, $selectableQty, 1, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;']) !!} /{{ $selectableQty }} @if($isSlotItem && $itemRow->activated_quantity) <span class="text-muted">({{ $itemRow->activated_quantity }} activated)</span> @endif @if($itemRow->getOthers()) {{ $itemRow->getOthers() }} @endif</td>
                             @else
-                                <td class="col-3">{!! Form::selectRange('', 0, 0, 0, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;', 'disabled']) !!} /{{ $itemRow->availableQuantity }} @if($itemRow->getOthers()) {{ $itemRow->getOthers() }} @endif</td>
+                                <td class="col-3">{!! Form::selectRange('', 0, 0, 0, ['class' => 'quantity-select', 'type' => 'number', 'style' => 'min-width:40px;', 'disabled']) !!} /{{ $selectableQty }} @if($isSlotItem && $itemRow->activated_quantity) <span class="text-muted">({{ $itemRow->activated_quantity }} activated)</span> @endif @if($itemRow->getOthers()) {{ $itemRow->getOthers() }} @endif</td>
                             @endif
                         @else
                             <td class="col-3">{!! $itemRow->count !!}</td>
@@ -148,5 +152,15 @@
         var $rowId = "#itemRow" + $checkbox.value
         $($rowId).find('.quantity-select').prop('name', $checkbox.checked ? 'quantities[]' : '')
     }
+
+    $('.slot-activate-button').on('click', function() {
+        if (!$('.item-check:checked').length) {
+            var $firstCheck = $('.item-check').first();
+            if ($firstCheck.length) {
+                $firstCheck.prop('checked', true);
+                updateQuantities($firstCheck[0]);
+            }
+        }
+    });
 </script>
 

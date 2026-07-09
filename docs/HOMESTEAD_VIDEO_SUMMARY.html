@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homestead Module — Video Summary</title>
+    <style>
+        @page { margin: 2cm; size: A4; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        h1 {
+            font-size: 22pt;
+            color: #1a1a2e;
+            border-bottom: 3px solid #c0396d;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 14pt;
+            color: #c0396d;
+            margin-top: 28px;
+            page-break-after: avoid;
+        }
+        h3 {
+            font-size: 12pt;
+            color: #333;
+            margin-top: 18px;
+            page-break-after: avoid;
+        }
+        p { margin: 8px 0; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 10pt;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th { background: #f5f5f5; font-weight: 600; }
+        tr:nth-child(even) td { background: #fafafa; }
+        .subtitle {
+            font-size: 12pt;
+            color: #666;
+            margin-bottom: 24px;
+        }
+        .pitch {
+            background: #fdf2f7;
+            border-left: 4px solid #c0396d;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-style: italic;
+        }
+        .workflow {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 12px 16px;
+            font-family: Consolas, monospace;
+            font-size: 10pt;
+            white-space: pre-line;
+            margin: 12px 0;
+        }
+        ul { margin: 8px 0; padding-left: 22px; }
+        li { margin: 4px 0; }
+        .footer {
+            margin-top: 36px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+            font-size: 9pt;
+            color: #888;
+            text-align: center;
+        }
+        .page-break { page-break-before: always; }
+        code {
+            background: #f0f0f0;
+            padding: 1px 4px;
+            font-size: 9pt;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Homestead Module — Video Summary</h1>
+<p class="subtitle">Kingdoms of Malcion &nbsp;|&nbsp; Companion document for the Homestead demo video &nbsp;|&nbsp; July 2026</p>
+
+<div class="pitch">
+    <strong>Homestead</strong> lets players create personal indoor <strong>Rooms</strong> and outdoor <strong>Houses</strong>, decorate them with owned inventory items in a visual editor, and save layouts — with admin-controlled item rules, slot limits, and full ownership validation.
+</div>
+
+<h2>What Is Homestead?</h2>
+<p>Homestead is a <strong>personal decoration system</strong> for players. Each user can:</p>
+<ul>
+    <li>Create <strong>indoor Rooms</strong> and <strong>outdoor Houses</strong></li>
+    <li>Decorate them with <strong>items from their inventory</strong></li>
+    <li><strong>Save layouts</strong> (furniture placement, wallpaper, flooring, etc.)</li>
+    <li>Return anytime to edit and update their spaces</li>
+</ul>
+<p>It is <strong>not</strong> a shared world or multiplayer builder — each player owns and manages their own rooms and houses.</p>
+
+<h2>Main Concepts</h2>
+<table>
+    <tr><th>Concept</th><th>Description</th></tr>
+    <tr><td><strong>Room</strong></td><td>Indoor space (parlor, bedroom, study, etc.)</td></tr>
+    <tr><td><strong>House</strong></td><td>Outdoor space (cottage yard, garden, exterior area)</td></tr>
+    <tr><td><strong>Editor</strong></td><td>Visual canvas where players place and arrange items</td></tr>
+    <tr><td><strong>Inventory</strong></td><td>Only items the player <strong>owns</strong> and that are <strong>configured for homestead</strong> appear in the editor</td></tr>
+    <tr><td><strong>Slots</strong></td><td>How many rooms/houses a player can create (expandable via special items; staff may have unlimited slots)</td></tr>
+</table>
+
+<h2>What the Video Demonstrates</h2>
+
+<h3>Part 1 — Introduction</h3>
+<p>Homestead lets players create personal indoor and outdoor spaces and decorate them with inventory items. Layouts are saved per room or house.</p>
+
+<h3>Part 2 — Navigation</h3>
+<ul>
+    <li><strong>Homestead</strong> in the top navbar → <strong>Rooms</strong> or <strong>Houses</strong></li>
+    <li><strong>Rooms</strong> (<code>/homestead/rooms</code>) — indoor spaces</li>
+    <li><strong>Houses</strong> (<code>/homestead/houses</code>) — outdoor spaces</li>
+</ul>
+<p>Both lists work the same way: create, edit, delete, and open the editor.</p>
+
+<h3>Part 3 — Create, Edit &amp; Delete Rooms</h3>
+<p>Players can:</p>
+<ul>
+    <li><strong>Create</strong> a room with a name (3–100 characters)</li>
+    <li><strong>Rename</strong> via Edit</li>
+    <li><strong>Delete</strong> a room (removes layout and all placements)</li>
+</ul>
+<p>Each user only sees and manages <strong>their own</strong> spaces.</p>
+
+<h3>Part 4 — Room Editor (Indoor)</h3>
+<p>The editor includes:</p>
+<ul>
+    <li><strong>Canvas</strong> (center) — where furniture is placed</li>
+    <li><strong>Inventory panel</strong> (right) — <strong>Furniture</strong> and <strong>Surfaces</strong> tabs</li>
+    <li><strong>Save</strong> — stores the layout</li>
+    <li><strong>Exit</strong> — returns to the rooms list</li>
+</ul>
+<p><strong>Furniture tab:</strong> click or drag items onto the canvas; drag to move; layer controls and delete for selected items.</p>
+<p><strong>Surfaces tab:</strong> click wallpaper/flooring to apply wall or floor styles.</p>
+<p>After <strong>Save</strong>, reloading the editor shows the same layout — data is persisted.</p>
+<p><strong>Important:</strong> The inventory only lists items the user <strong>owns</strong> and that admins marked as <strong>homestead placeable</strong>.</p>
+
+<div class="page-break"></div>
+
+<h3>Part 5 — House Editor (Outdoor)</h3>
+<p>Same editor pattern, tuned for outdoor use:</p>
+<ul>
+    <li>Outdoor-style canvas (sky/grass)</li>
+    <li>Items marked for <strong>outdoor</strong> or <strong>both</strong> room types</li>
+    <li><strong>Surfaces</strong> for ground cover / paths</li>
+</ul>
+<p>Saved outdoor layouts persist the same way as indoor rooms.</p>
+
+<h3>Part 6 — Building Over Time</h3>
+<p>Players can start with an empty room/house, add items, see <strong>unsaved changes</strong>, <strong>Save</strong>, and <strong>Exit</strong>. They can return later and keep building — each space saves independently.</p>
+
+<h3>Part 7 — Security &amp; Validation</h3>
+<ul>
+    <li>Only the <strong>owner</strong> can edit their room/house</li>
+    <li>Indoor and outdoor URLs are <strong>separate</strong> (a room cannot be edited via the houses URL)</li>
+    <li><strong>Save</strong> rejects invalid data: wrong item type, out-of-bounds placement, placing more than owned quantity</li>
+    <li><strong>Login required</strong> — guests cannot access Homestead</li>
+</ul>
+
+<h3>Part 8 — Admin Setup (Content Configuration)</h3>
+<p>Admins configure which items work in Homestead under <strong>Admin → Data → Items</strong> (click the crown icon in the navbar):</p>
+<table>
+    <tr><th>Setting</th><th>Purpose</th></tr>
+    <tr><td><strong>Homestead Placeable Item</strong></td><td>Item can appear in the editor</td></tr>
+    <tr><td><strong>Placement Type</strong></td><td>Furniture vs surfaces (floor, decoration, wall, flooring, exterior, etc.)</td></tr>
+    <tr><td><strong>Room Type</strong></td><td>Indoor only, outdoor only, or both</td></tr>
+    <tr><td><strong>Default Width / Height</strong></td><td>Size on the canvas (pixels)</td></tr>
+</table>
+<p>Admins grant items to users via <strong>Admin → Grants → Item Grants</strong>. Until a player owns homestead items, their editor inventory stays empty.</p>
+
+<h3>Part 9 — Closing</h3>
+<p>Homestead gives each player personal rooms and houses, a visual editor, inventory-driven decoration, and saved layouts — with CRUD, ownership checks, and validation built in.</p>
+
+<h2>Player Workflow</h2>
+<div class="workflow">Log in
+  → Homestead → Rooms or Houses
+    → Create space (if slots available)
+      → Editor → place items from inventory
+        → Save → Exit</div>
+
+<h2>Staff vs Regular Player</h2>
+<table>
+    <tr><th></th><th>Staff / Admin</th><th>Regular Member</th></tr>
+    <tr><td>Slot limit</td><td>May show <strong>"Staff: unlimited slots"</strong></td><td><strong>"You are using X of Y room slots"</strong></td></tr>
+    <tr><td>Editor</td><td>Same UI</td><td>Same UI</td></tr>
+    <tr><td>Items</td><td>Must still <strong>own</strong> items to place them</td><td>Must <strong>own</strong> items to place them</td></tr>
+</table>
+
+<h2>Quick Reference URLs</h2>
+<table>
+    <tr><th>Page</th><th>URL</th></tr>
+    <tr><td>Rooms list</td><td><code>/homestead/rooms</code></td></tr>
+    <tr><td>Houses list</td><td><code>/homestead/houses</code></td></tr>
+    <tr><td>Room editor</td><td><code>/homestead/rooms/{id}/editor</code></td></tr>
+    <tr><td>House editor</td><td><code>/homestead/houses/{id}/editor</code></td></tr>
+    <tr><td>Admin — Items</td><td><code>/admin/data/items</code></td></tr>
+    <tr><td>Admin — Grant items</td><td><code>/admin/grants/items</code></td></tr>
+</table>
+
+<h2>Frequently Asked Questions</h2>
+<p><strong>Q: Why is my inventory empty in the editor?</strong><br>
+A: You need homestead-configured items in your inventory. Admins grant or award them.</p>
+<p><strong>Q: Can I use any item?</strong><br>
+A: Only items marked <strong>Homestead Placeable</strong> with the correct <strong>room type</strong> and <strong>placement type</strong>.</p>
+<p><strong>Q: Can other players edit my room?</strong><br>
+A: No — only you (or staff with admin inventory powers).</p>
+<p><strong>Q: What happens if I delete a room?</strong><br>
+A: The room, its layout, and all placements are removed permanently.</p>
+
+<div class="footer">
+    Kingdoms of Malcion — Homestead Module Video Summary — Lorekeeper v2.1.7
+</div>
+
+</body>
+</html>

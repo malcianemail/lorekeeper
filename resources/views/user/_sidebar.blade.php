@@ -5,6 +5,7 @@
         <div class="sidebar-item"><a href="{{ $user->url.'/gallery' }}" class="{{ set_active('user/'.$user->name.'/gallery*') }}">Gallery</a></div>
         <div class="sidebar-item"><a href="{{ $user->url.'/favorites' }}" class="{{ set_active('user/'.$user->name.'/favorites*') }}">Favorites</a></div>
         <div class="sidebar-item"><a href="{{ $user->url.'/favorites/own-characters' }}" class="{{ set_active('user/'.$user->name.'/favorites/own-characters*') }}">Own Character Favorites</a></div>
+        <div class="sidebar-item"><a href="{{ $user->url.'/homestead-favorites' }}" class="{{ set_active('user/'.$user->name.'/homestead-favorites*') }}">Homestead Favorites</a></div>
     </li>
     <li class="sidebar-section">
         <div class="sidebar-section-header">User</div>

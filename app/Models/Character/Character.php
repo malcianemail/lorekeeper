@@ -44,7 +44,8 @@ class Character extends Model
         'is_sellable', 'is_tradeable', 'is_giftable',
         'sale_value', 'transferrable_at', 'is_visible',
         'is_gift_art_allowed', 'is_gift_writing_allowed', 'is_trading', 'sort',
-        'is_myo_slot', 'name', 'trade_id', 'owner_url'
+        'is_myo_slot', 'name', 'trade_id', 'owner_url',
+        'max_sprite_slots', 'active_sprite_id',
     ];
 
     /**
@@ -135,6 +136,22 @@ class Character extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User\User', 'user_id');
+    }
+
+    /**
+     * Get the homestead sprites for the character.
+     */
+    public function sprites()
+    {
+        return $this->hasMany('App\Models\Character\CharacterSprite')->orderBy('sort', 'DESC');
+    }
+
+    /**
+     * Get the active homestead sprite for the character.
+     */
+    public function activeSprite()
+    {
+        return $this->belongsTo('App\Models\Character\CharacterSprite', 'active_sprite_id');
     }
 
     /**

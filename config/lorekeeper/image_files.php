@@ -62,4 +62,9 @@ return [
         'description' => 'Thumbnail used for gallery submissions with a set content warning. PNG format, size of masterlist thumbnails.',
         'filename' => 'content_warning.png'
     ],
+    'homestead_house_editor_bg' => [
+        'name' => 'Homestead House Editor Background',
+        'description' => 'Default background for the outdoor house editor canvas. Recommended size 700x500px or larger (PNG or JPG). When uploaded, replaces the gradient configured in homestead settings.',
+        'filename' => 'homestead-house-editor-bg.png'
+    ],
 ];

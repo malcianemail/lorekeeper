@@ -21,7 +21,8 @@ class Item extends Model
      */
     protected $fillable = [
         'item_category_id', 'name', 'has_image', 'description', 'parsed_description', 'allow_transfer',
-        'data', 'reference_url', 'artist_alias', 'artist_url', 'artist_id', 'is_released'
+        'data', 'reference_url', 'artist_alias', 'artist_url', 'artist_id', 'is_released',
+        'is_homestead_item', 'placement_type', 'homestead_room_type', 'default_width', 'default_height',
     ];
 
     protected $appends = ['image_url'];
@@ -48,6 +49,10 @@ class Item extends Model
         'uses' => 'nullable|between:3,250',
         'release' => 'nullable|between:3,100',
         'currency_quantity' => 'nullable|integer|min:1',
+        'placement_type' => 'nullable|string|max:50',
+        'homestead_room_type' => 'nullable|string|max:50',
+        'default_width' => 'nullable|integer|min:8|max:700',
+        'default_height' => 'nullable|integer|min:8|max:500',
     ];
 
     /**
@@ -64,6 +69,10 @@ class Item extends Model
         'uses' => 'nullable|between:3,250',
         'release' => 'nullable|between:3,100',
         'currency_quantity' => 'nullable|integer|min:1',
+        'placement_type' => 'nullable|string|max:50',
+        'homestead_room_type' => 'nullable|string|max:50',
+        'default_width' => 'nullable|integer|min:8|max:700',
+        'default_height' => 'nullable|integer|min:8|max:500',
     ];
 
     /**********************************************************************************************
@@ -96,6 +105,14 @@ class Item extends Model
         return $this->belongsTo('App\Models\User\User', 'artist_id');
     }
 
+    /**
+     * Get furniture placements using this item.
+     */
+    public function roomPlacements()
+    {
+        return $this->hasMany('App\Models\Homestead\RoomPlacement');
+    }
+
     /**********************************************************************************************
 
         SCOPES
@@ -112,6 +129,42 @@ class Item extends Model
     public function scopeSortAlphabetical($query, $reverse = false)
     {
         return $query->orderBy('name', $reverse ? 'DESC' : 'ASC');
+    }
+
+    /**
+     * Scope a query to homestead items.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeHomestead($query)
+    {
+        return $query->where('is_homestead_item', 1);
+    }
+
+    /**
+     * Scope a query to items placeable in a homestead room editor.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string                                 $roomType
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePlaceableInHomestead($query, $roomType = 'indoor')
+    {
+        $placementTypes = \App\Services\Homestead\HomesteadConfig::placementTypes($roomType);
+
+        $excludedTags = Config::get('lorekeeper.homestead.excluded_editor_item_tags', []);
+
+        return $query->homestead()
+            ->whereIn('placement_type', $placementTypes)
+            ->where(function ($inner) use ($roomType) {
+                $inner->whereNull('homestead_room_type')
+                    ->orWhere('homestead_room_type', 'both')
+                    ->orWhere('homestead_room_type', $roomType);
+            })
+            ->whereDoesntHave('tags', function ($tagQuery) use ($excludedTags) {
+                $tagQuery->whereIn('tag', $excludedTags)->where('is_active', 1);
+            });
     }
 
     /**
