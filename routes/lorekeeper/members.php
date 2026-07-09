@@ -100,18 +100,16 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::post('{slug}/approval', 'CharacterController@postCharacterApproval');
     Route::get('{slug}/approval', 'CharacterController@getCharacterApproval');
 
-<<<<<<< HEAD
     Route::get('{slug}/profile/edit', 'CharacterController@getEditCharacterProfile');
     Route::post('{slug}/profile/edit', 'CharacterController@postEditCharacterProfile');
 
     Route::post('{slug}/drops', 'CharacterController@postClaimCharacterDrops');
-=======
+
     Route::post('{slug}/sprites', 'CharacterSpriteController@postCreateSprite');
     Route::post('{slug}/sprites/sort', 'CharacterSpriteController@postSortSprites');
     Route::post('{slug}/sprites/{id}/edit', 'CharacterSpriteController@postEditSprite');
     Route::post('{slug}/sprites/{id}/delete', 'CharacterSpriteController@postDeleteSprite');
     Route::post('{slug}/sprites/{id}/active', 'CharacterSpriteController@postSetActiveSprite');
->>>>>>> ed55f08f7805d0303b347d2dbec3aabf953cc8d3
 });
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
     Route::get('{id}/profile/edit', 'MyoController@getEditCharacterProfile');
