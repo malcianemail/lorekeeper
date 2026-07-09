@@ -67,7 +67,9 @@ class CharacterItem extends Model
      */
     public function getDataAttribute() 
     {
-        return json_decode($this->attributes['data'], true);
+        $decoded = json_decode($this->attributes['data'] ?? '', true);
+
+        return is_array($decoded) ? $decoded : [];
     }
     
     /**

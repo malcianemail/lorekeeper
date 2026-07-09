@@ -291,6 +291,37 @@ class ItemService extends Service
         if(!isset($data['is_released']) && Config::get('lorekeeper.extensions.item_entry_expansion.extra_fields')) $data['is_released'] = 0;
         else $data['is_released'] = 1;
 
+        if(!isset($data['is_homestead_item'])) $data['is_homestead_item'] = 0;
+        else $data['is_homestead_item'] = 1;
+
+        if(!$data['is_homestead_item']) {
+            $data['placement_type'] = null;
+            $data['homestead_room_type'] = null;
+            $data['default_width'] = null;
+            $data['default_height'] = null;
+        } else {
+            if(empty($data['placement_type'])) {
+                throw new \Exception('Homestead items require a placement type.');
+            }
+
+            $validPlacementTypes = array_keys(Config::get('lorekeeper.homestead.placement_types', []));
+            if(!in_array($data['placement_type'], $validPlacementTypes, true)) {
+                throw new \Exception('The selected placement type is invalid.');
+            }
+
+            $validRoomTypes = array_keys(Config::get('lorekeeper.homestead.homestead_room_types', []));
+            if(!in_array($data['homestead_room_type'] ?? '', $validRoomTypes, true)) {
+                throw new \Exception('The selected homestead room type is invalid.');
+            }
+
+            if(empty($data['homestead_room_type'])) {
+                $data['homestead_room_type'] = null;
+            }
+
+            $data['default_width'] = isset($data['default_width']) && $data['default_width'] ? (int) $data['default_width'] : 64;
+            $data['default_height'] = isset($data['default_height']) && $data['default_height'] ? (int) $data['default_height'] : 64;
+        }
+
         if(isset($data['remove_image']))
         {
             if($item && $item->has_image && $data['remove_image'])

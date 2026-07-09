@@ -29,6 +29,8 @@ use App\Models\Character\Sublist;
 
 use App\Models\Comment;
 use App\Models\Forum;
+use App\Services\Homestead\FavoriteService;
+use App\Services\Homestead\RoomManager;
 
 use App\Http\Controllers\Controller;
 
@@ -64,11 +66,33 @@ class UserController extends Controller
         $characters = $this->user->characters();
         if(!Auth::check() || !(Auth::check() && Auth::user()->hasPower('manage_characters'))) $characters->visible();
 
+        $roomManager = app(RoomManager::class);
+        $homesteadFavorites = app(FavoriteService::class)->getProfileFavoritesPreview($this->user, 4);
+        $spaceSubjects = $homesteadFavorites->filter(function ($favorite) {
+            return in_array($favorite->ref_type, [
+                \App\Models\Homestead\HomesteadFavorite::TYPE_ROOM,
+                \App\Models\Homestead\HomesteadFavorite::TYPE_HOUSE,
+            ], true) && $favorite->subject;
+        })->pluck('subject');
+
+        $previewDataByRoomId = $roomManager->getBatchPreviewViewData($spaceSubjects);
+        $homesteadFavorites = $homesteadFavorites->map(function ($favorite) use ($previewDataByRoomId) {
+            if (in_array($favorite->ref_type, [
+                \App\Models\Homestead\HomesteadFavorite::TYPE_ROOM,
+                \App\Models\Homestead\HomesteadFavorite::TYPE_HOUSE,
+            ], true) && $favorite->subject) {
+                $favorite->preview_data = $previewDataByRoomId[$favorite->subject->id] ?? null;
+            }
+
+            return $favorite;
+        });
+
         return view('user.profile', [
             'user' => $this->user,
             'items' => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
             'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
             'characters' => $characters,
+            'homesteadFavorites' => $homesteadFavorites,
         ]);
     }
 
@@ -377,4 +401,40 @@ class UserController extends Controller
         'posts' => $posts
     ]);
 }
+/*
+     * Shows a user's homestead favorites.
+     *
+     * @param  string                               $name
+     * @param  \App\Services\Homestead\FavoriteService  $service
+     * @param  \App\Services\Homestead\RoomManager      $roomManager
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getUserHomesteadFavorites($name, FavoriteService $service, RoomManager $roomManager)
+    {
+        $favorites = $service->getUserFavorites($this->user);
+        $spaceSubjects = $favorites->getCollection()->filter(function ($favorite) {
+            return in_array($favorite->ref_type, [
+                \App\Models\Homestead\HomesteadFavorite::TYPE_ROOM,
+                \App\Models\Homestead\HomesteadFavorite::TYPE_HOUSE,
+            ], true) && $favorite->subject;
+        })->pluck('subject');
+
+        $previewDataByRoomId = $roomManager->getBatchPreviewViewData($spaceSubjects);
+        $favorites->getCollection()->transform(function ($favorite) use ($previewDataByRoomId) {
+            if (in_array($favorite->ref_type, [
+                \App\Models\Homestead\HomesteadFavorite::TYPE_ROOM,
+                \App\Models\Homestead\HomesteadFavorite::TYPE_HOUSE,
+            ], true) && $favorite->subject) {
+                $favorite->preview_data = $previewDataByRoomId[$favorite->subject->id] ?? null;
+            }
+
+            return $favorite;
+        });
+
+        return view('user.homestead_favorites', [
+            'user' => $this->user,
+            'favorites' => $favorites,
+            'sublists' => Sublist::orderBy('sort', 'DESC')->get(),
+        ]);
+    }
 }

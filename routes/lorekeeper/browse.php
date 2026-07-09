@@ -48,6 +48,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'Users'], function() {
     Route::get('{name}/gallery', 'UserController@getUserGallery');
     Route::get('{name}/favorites', 'UserController@getUserFavorites');
     Route::get('{name}/favorites/own-characters', 'UserController@getUserOwnCharacterFavorites');
+    Route::get('{name}/homestead-favorites', 'UserController@getUserHomesteadFavorites');
 
     Route::get('{name}', 'UserController@getUser');
     Route::get('{name}/aliases', 'UserController@getUserAliases');
@@ -84,6 +85,7 @@ Route::group(['prefix' => 'character', 'namespace' => 'Characters'], function() 
     Route::get('{slug}/submissions', 'CharacterController@getCharacterSubmissions');
 
     Route::get('{slug}/gallery', 'CharacterController@getCharacterGallery');
+    Route::get('{slug}/sprites', 'CharacterController@getCharacterSprites');
 });
 Route::group(['prefix' => 'myo', 'namespace' => 'Characters'], function() {
     Route::get('{id}', 'MyoController@getCharacter');
@@ -168,6 +170,14 @@ Route::group(['prefix' => 'gallery'], function() {
     Route::get('{id}', 'GalleryController@getGallery');
     Route::get('view/{id}', 'GalleryController@getSubmission');
     Route::get('view/favorites/{id}', 'GalleryController@getSubmissionFavorites');
+});
+
+/**************************************************************************************************
+    Showcase
+**************************************************************************************************/
+Route::group(['prefix' => 'showcase', 'namespace' => 'Homestead'], function() {
+    Route::get('/', 'ShowcaseController@getIndex');
+    Route::get('{id}', 'ShowcaseController@getFeatured')->where('id', '[0-9]+');
 });
 
 /**************************************************************************************************

@@ -822,3 +822,546 @@ tr.accountbound {
       border-right: 0 !important;
     }
   }
+
+  /* HOMESTEAD EDITOR *************************************************************************************/
+.homestead-editor-wrapper {
+    margin-top: -0.5rem;
+}
+
+.homestead-editor {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 220px);
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.homestead-editor-toolbar {
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.homestead-editor-body {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.homestead-editor-body.row {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+}
+
+.homestead-editor-canvas-col {
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+}
+
+.homestead-editor-canvas {
+    flex: 1 1 auto;
+    min-height: 360px;
+    background: #e9ecef;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.homestead-editor-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    flex: 1 1 auto;
+}
+
+.homestead-editor-canvas-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    user-select: none;
+    touch-action: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border: 1px solid #ced4da;
+    background: #fff;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.homestead-editor-canvas-base-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.homestead-editor-canvas-room-bg {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 55%, #dee2e6 100%);
+}
+
+.homestead-editor-canvas-wall-surface,
+.homestead-editor-canvas-floor-surface {
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center center;
+    z-index: 2;
+}
+
+.homestead-editor-canvas-wall-surface {
+    top: 0;
+    height: 55%;
+}
+
+.homestead-editor-canvas-floor-surface {
+    bottom: 0;
+    height: 45%;
+}
+
+.homestead-editor-canvas-items {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+}
+
+.homestead-editor-placed-item {
+    position: absolute;
+    cursor: move;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+}
+
+.homestead-editor-placed-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    display: block;
+}
+
+.homestead-editor-placed-item-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+    color: #6c757d;
+    font-size: 1.25rem;
+}
+
+.homestead-editor-placed-item.is-selected {
+    border-color: #3490dc;
+    box-shadow: 0 0 0 2px rgba(52, 144, 220, 0.35);
+}
+
+.homestead-editor-placement-layer-controls {
+    position: absolute;
+    top: -26px;
+    right: 0;
+    display: none;
+    align-items: center;
+    gap: 2px;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.homestead-editor-placed-item.is-selected .homestead-editor-placement-layer-controls {
+    display: flex;
+}
+
+.homestead-editor-layer-btn {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #495057;
+    font-size: 10px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.homestead-editor-layer-btn:hover:not(:disabled),
+.homestead-editor-layer-btn:focus:not(:disabled) {
+    background: #fff;
+    border-color: #3490dc;
+    color: #3490dc;
+    outline: none;
+}
+
+.homestead-editor-layer-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.homestead-editor-selection-controls .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.homestead-editor-inventory-item.is-placeable,
+.homestead-editor-inventory-item.is-surface-selectable {
+    cursor: pointer;
+}
+
+.homestead-editor-inventory-item.is-placeable:hover:not(.is-unavailable),
+.homestead-editor-inventory-item.is-surface-selectable:hover:not(.is-unavailable) {
+    border-color: #3490dc;
+    background: #eef5fc;
+}
+
+.homestead-editor-inventory-item.is-selected {
+    border-color: #3490dc;
+    box-shadow: 0 0 0 2px rgba(52, 144, 220, 0.35);
+    background: #eef5fc;
+}
+
+.homestead-editor-canvas-placeholder {
+    text-align: center;
+    max-width: 320px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    pointer-events: none;
+}
+
+.homestead-editor-canvas-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(233, 236, 239, 0.85);
+    z-index: 5;
+}
+
+.homestead-editor-unsaved-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.homestead-spaces-empty {
+    border: 1px dashed #dee2e6;
+    border-radius: 0.25rem;
+    background: #f8f9fa;
+}
+
+.homestead-spaces-table .btn-group .btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+    .homestead-spaces-row-actions .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .homestead-spaces-row-actions .btn-group .btn {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .homestead-editor-toolbar-actions {
+        flex-shrink: 0;
+    }
+
+    .homestead-editor-inventory-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .homestead-editor-canvas-col {
+        min-height: 480px;
+    }
+
+    .homestead-editor-inventory {
+        min-height: 480px;
+    }
+}
+
+.homestead-editor-inventory-col {
+    border-left: 1px solid #dee2e6;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.homestead-editor-inventory {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 360px;
+}
+
+.homestead-editor-inventory-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+    flex-shrink: 0;
+}
+
+.homestead-editor-inventory-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.75rem;
+    min-height: 0;
+}
+
+.homestead-editor-inventory-nav .nav-link {
+    font-size: 0.75rem;
+}
+
+.homestead-editor-inventory-tab-content {
+    min-height: 0;
+}
+
+.homestead-editor-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.homestead-editor-inventory-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    background: #f8f9fa;
+    padding: 0.5rem;
+    text-align: center;
+    cursor: default;
+}
+
+.homestead-editor-inventory-item.is-unavailable {
+    opacity: 0.5;
+}
+
+.homestead-editor-inventory-item-image {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 0.2rem;
+    margin-bottom: 0.35rem;
+    overflow: hidden;
+}
+
+.homestead-editor-inventory-item-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.homestead-editor-inventory-item-name {
+    font-size: 0.7rem;
+    line-height: 1.2;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.homestead-editor-inventory-item-qty {
+    font-size: 0.65rem;
+    color: #6c757d;
+}
+
+.homestead-editor-inventory-empty {
+    text-align: center;
+    padding: 2rem 0.5rem;
+}
+
+.homestead-editor-inventory-placeholder {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: #6c757d;
+}
+
+@media (max-width: 991.98px) {
+    .homestead-editor-inventory-col {
+        border-left: none;
+        border-top: 1px solid #dee2e6;
+        display: none;
+    }
+
+    .homestead-editor-inventory-col.is-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        max-height: 50vh;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .homestead-editor-canvas {
+        min-height: 280px;
+    }
+}
+
+/**************************************************************************************************
+    Character Sprites
+**************************************************************************************************/
+
+.character-sprite-thumb {
+    max-height: 200px;
+    width: auto;
+    object-fit: contain;
+}
+
+.character-sprite-thumb-empty {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.sprite-sortable .sortable-placeholder {
+    min-height: 200px;
+    border: 2px dashed #dee2e6;
+    border-radius: 0.25rem;
+    background: #f8f9fa;
+}
+
+/* Homestead showcase / featured */
+.homestead-showcase-filters .nav-link {
+    font-size: 0.9rem;
+}
+
+.homestead-featured-card {
+    overflow: hidden;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.homestead-featured-card:hover {
+    box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.12) !important;
+}
+
+.homestead-featured-card-media {
+    position: relative;
+    background: #f8f9fa;
+    min-height: 180px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.homestead-featured-card-media-link {
+    position: relative;
+    z-index: 1;
+}
+
+.homestead-featured-card-type {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 2;
+}
+
+.homestead-featured-card-favorite,
+.homestead-favorite-card-action {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 5;
+}
+
+.homestead-favorite-card-media {
+    position: relative;
+    background: #f8f9fa;
+    min-height: 180px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.homestead-featured-card-favorite .homestead-favorite-button,
+.homestead-favorite-card-action .homestead-favorite-button {
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.homestead-room-preview {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.homestead-featured-card-character-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.homestead-featured-card-fallback {
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f3f5;
+}
+
+.homestead-room-preview-compact {
+    min-height: 180px;
+}
+
+.homestead-room-preview-stage-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.homestead-room-preview-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.homestead-showcase-character-image {
+    max-height: 700px;
+}
+
+.homestead-showcase-note {
+    white-space: normal;
+}
+
+.featured-items-table .handle {
+    cursor: move;
+    color: #6c757d;
+}
+
+.homestead-favorite-button .homestead-favorite-count {
+    margin-left: 0.35rem;
+    font-size: 0.85em;
+}
+
+.homestead-favorite-button.is-favorited {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.homestead-favorite-count-display {
+    font-size: 0.9rem;
+}

@@ -1,5 +1,5 @@
 function loadModal(url, title) {
-    $('#modal').find('.modal-body').html('');
+    $('#modal').find('.modal-body').html('<div class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-muted"></i></div>');
     $('#modal').find('.modal-title').html(title);
     $('#modal').find('.modal-body').load(url, function( response, status, xhr ) {
         if ( status == "error" ) {
@@ -10,6 +10,7 @@ function loadModal(url, title) {
             $('#modal [data-toggle=tooltip]').tooltip({html: true});
             $('#modal [data-toggle=toggle]').bootstrapToggle();
             $('#modal .cp').colorpicker();
+            $('#modal .homestead-space-form [autofocus]').trigger('focus');
         }
     });
     $('#modal').modal('show');

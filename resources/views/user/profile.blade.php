@@ -113,9 +113,34 @@
 
 <div class="text-right"><a href="{{ $user->url.'/characters' }}">View all...</a></div>
 <hr>
-<br><br>
+
+@if(isset($homesteadFavorites) && $homesteadFavorites->count())
+    <h2><a href="{{ $user->url.'/homestead-favorites' }}">{{ \App\Services\Homestead\HomesteadConfig::favoriteLabel('profile_title') }}</a></h2>
+    <div class="row mb-4">
+        @foreach($homesteadFavorites as $favorite)
+            <div class="col-md-3 col-sm-6 mb-3">
+                @include('homestead._favorite_card', [
+                    'favorite' => $favorite,
+                    'preview' => $favorite->preview_data ?? null,
+                ])
+            </div>
+        @endforeach
+    </div>
+    <div class="text-right mb-4"><a href="{{ $user->url.'/homestead-favorites' }}">View all...</a></div>
+    <hr>
+@endif
 
 @comments(['model' => $user->profile,
         'perPage' => 5
     ])
+@endsection
+
+@section('scripts')
+@parent
+@if(isset($homesteadFavorites) && $homesteadFavorites->count())
+<script src="{{ asset('js/homestead-room-preview.js') }}?v={{ filemtime(public_path('js/homestead-room-preview.js')) }}"></script>
+@endif
+@if(Auth::check())
+<script src="{{ asset('js/homestead-favorite-button.js') }}?v={{ filemtime(public_path('js/homestead-favorite-button.js')) }}"></script>
+@endif
 @endsection

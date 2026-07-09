@@ -50,7 +50,11 @@ return [
     'manage_reports' => [
         'name' => 'Manage Reports',
         'description' => 'Allow rank to view the reports queue.'
-    ]
+    ],
+    'unlimited_homestead_slots' => [
+        'name' => 'Unlimited Homestead Slots',
+        'description' => 'Allow rank to create unlimited indoor rooms and outdoor houses without slot limits. Regular members remain limited by base slots and activated slot items.'
+    ],
 
 
 ];

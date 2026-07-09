@@ -1,0 +1,1 @@
+<p>This item permanently unlocks an additional outdoor house when activated from a user's inventory. No extra tag settings are required. Remember to set the tag to <strong>Active</strong> below so users can activate it.</p>

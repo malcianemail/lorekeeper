@@ -67,7 +67,9 @@ class UserItem extends Model
      */
     public function getDataAttribute() 
     {
-        return json_decode($this->attributes['data'], true);
+        $decoded = json_decode($this->attributes['data'] ?? '', true);
+
+        return is_array($decoded) ? $decoded : [];
     }
     
     /**
@@ -89,6 +91,18 @@ class UserItem extends Model
     public function getAvailableQuantityAttribute()
     {
         return ($this->count - $this->trade_count - $this->update_count- $this->submission_count);
+    }
+
+    /**
+     * Gets how many slot items from this stack can still be activated.
+     *
+     * @return int
+     */
+    public function getActivatableSlotQuantityAttribute()
+    {
+        $inactive = max(0, (int) $this->count - (int) ($this->attributes['activated_quantity'] ?? 0));
+
+        return min($this->availableQuantity, $inactive);
     }
 
     /**

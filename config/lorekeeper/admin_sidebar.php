@@ -125,6 +125,40 @@ return [
             ],
         ]
     ],
+    'Homestead' => [
+        'power' => 'edit_data',
+        'links' => [
+            [
+                'name' => 'Featured Showcase',
+                'url' => 'admin/homestead/featured'
+            ],
+            [
+                'name' => 'Featured Rooms',
+                'url' => 'admin/homestead/featured/rooms'
+            ],
+            [
+                'name' => 'Featured Houses',
+                'url' => 'admin/homestead/featured/houses'
+            ],
+            [
+                'name' => 'Featured Characters',
+                'url' => 'admin/homestead/featured/characters'
+            ],
+        ],
+    ],
+    'Homestead Characters' => [
+        'power' => 'manage_characters',
+        'links' => [
+            [
+                'name' => 'Character Sprites',
+                'url' => 'admin/homestead/sprites'
+            ],
+            [
+                'name' => 'Sprite Slots',
+                'url' => 'admin/homestead/sprite-slots'
+            ],
+        ],
+    ],
     'Data' => [
         'power' => 'edit_data',
         'links' => [
@@ -165,9 +199,9 @@ return [
                 'url' => 'admin/data/dailies'
             ],
             [
-                'name' => 'Character Drops',
-                'url' => 'admin/data/character-drops'
-            ],
+    'name' => 'Character Drops',
+    'url' => 'admin/data/character-drops'
+],
             [
                 'name' => 'Currencies',                'url' => 'admin/data/currencies'
             ],

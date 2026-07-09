@@ -229,7 +229,7 @@ class ItemController extends Controller
         $data = $request->only([
             'name', 'allow_transfer', 'item_category_id', 'description', 'image', 'remove_image', 'rarity',
             'reference_url', 'artist_id', 'artist_url', 'uses', 'shops', 'prompts', 'release', 'currency_id', 'currency_quantity',
-            'is_released'
+            'is_released', 'is_homestead_item', 'placement_type', 'homestead_room_type', 'default_width', 'default_height',
         ]);
         if($id && $service->updateItem(Item::find($id), $data, Auth::user())) {
             flash('Item updated successfully.')->success();
@@ -350,13 +350,21 @@ class ItemController extends Controller
     public function postEditItemTag(Request $request, ItemService $service, $id, $tag)
     {
         $item = Item::find($id);
+        if(!$item) {
+            flash('Invalid item selected.')->error();
+            return redirect()->to('admin/data/items');
+        }
+
         if($service->editItemTag($item, $tag, $request->all())) {
             flash('Tag edited successfully.')->success();
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
+            $itemTag = $item->tags()->where('tag', $tag)->first();
+
+            return redirect()->to($itemTag ? $itemTag->adminUrl : 'admin/data/items/edit/'.$item->id);
         }
-        return redirect()->back();
+        return redirect()->to('admin/data/items/edit/'.$item->id);
     }
 
     /**
