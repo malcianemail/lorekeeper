@@ -499,3 +499,4 @@ Route::group(['prefix' => 'homestead', 'namespace' => 'Homestead'], function() {
         Route::get('sprite-slots', 'SpriteSlotController@getIndex');
         Route::post('sprite-slots/edit/{id}', 'SpriteSlotController@postEditSlots')->where('id', '[0-9]+');
     });
+});
