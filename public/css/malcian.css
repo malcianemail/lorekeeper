@@ -1,0 +1,27 @@
+/* Malcian custom theme */
+
+#header {
+    position: relative;
+    overflow: visible;
+}
+
+.header-logo {
+    position: absolute;
+    top: 0px;
+    right: 200px;
+    width: 420px;
+    z-index: 100;
+    pointer-events: none;
+    filter:
+    drop-shadow(0 0 8px rgba(255,255,255,.9))
+    drop-shadow(0 0 18px rgba(255,255,255,.7))
+    drop-shadow(0 0 30px rgba(255,240,250,.5));
+}
+
+@media (max-width: 768px) {
+    .header-logo {
+        width: 260px;
+        right: 10px;
+        top: 10px;
+    }
+}
